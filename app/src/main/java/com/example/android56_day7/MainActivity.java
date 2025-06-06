@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra("name", product.getTitle());
                             intent.putExtra("description", product.getDescription());
                             intent.putExtra("price", product.getPrice().toString());
+                            intent.putExtra("image", product.getThumbnail());
                             startActivity(intent);
                         }
                     });
