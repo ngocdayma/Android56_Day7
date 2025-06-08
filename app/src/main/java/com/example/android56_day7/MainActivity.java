@@ -2,7 +2,6 @@ package com.example.android56_day7;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,22 +11,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.android56_day7.Retrofit.RetrofitClient;
 import com.example.android56_day7.adapters.ProductAdapter;
-import com.example.android56_day7.api.ProductApi;
-import com.example.android56_day7.interfaces.ProductClickListener;
-import com.example.android56_day7.interfaces.ProductPresenterImpl;
 import com.example.android56_day7.interfaces.ProductViewImpl;
-import com.example.android56_day7.models.AllProductResponse;
 import com.example.android56_day7.models.Product;
 import com.example.android56_day7.presenters.ProductPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements ProductViewImpl {
 
