@@ -1,7 +1,7 @@
 package com.example.android56_day7.Retrofit;
 
 import com.example.android56_day7.api.ProductApi;
-import com.example.android56_day7.constains.Constant;
+import com.example.android56_day7.constants.Constant;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

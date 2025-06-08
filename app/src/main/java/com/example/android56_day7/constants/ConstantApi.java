@@ -1,4 +1,4 @@
-package com.example.android56_day7.constains;
+package com.example.android56_day7.constants;
 
 public class ConstantApi {
     public static final String GET_ALL_PRODUCTS = "products";

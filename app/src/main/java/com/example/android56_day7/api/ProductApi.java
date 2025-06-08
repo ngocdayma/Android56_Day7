@@ -1,6 +1,6 @@
 package com.example.android56_day7.api;
 
-import com.example.android56_day7.constains.ConstantApi;
+import com.example.android56_day7.constants.ConstantApi;
 import com.example.android56_day7.models.AllProductResponse;
 import com.example.android56_day7.models.Product;
 
