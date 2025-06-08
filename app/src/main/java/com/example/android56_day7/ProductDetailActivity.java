@@ -23,7 +23,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         txtDescription = findViewById(R.id.txtDescription);
         txtPrice = findViewById(R.id.txtPrice);
 
-        // Nhận dữ liệu
         String name = getIntent().getStringExtra("name");
         String description = getIntent().getStringExtra("description");
         String price = getIntent().getStringExtra("price");
