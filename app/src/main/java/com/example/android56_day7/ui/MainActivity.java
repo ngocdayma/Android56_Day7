@@ -1,4 +1,4 @@
-package com.example.android56_day7;
+package com.example.android56_day7.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.android56_day7.R;
 import com.example.android56_day7.adapters.ProductAdapter;
 import com.example.android56_day7.interfaces.ProductViewImpl;
 import com.example.android56_day7.models.Product;

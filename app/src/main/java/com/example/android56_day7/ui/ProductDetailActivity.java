@@ -1,4 +1,4 @@
-package com.example.android56_day7;
+package com.example.android56_day7.ui;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.android56_day7.R;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
