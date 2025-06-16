@@ -19,7 +19,7 @@
             android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
-            android:background="#00FF00" />
+            android:background="#949994" />
 
         <LinearLayout
             android:layout_width="0dp"

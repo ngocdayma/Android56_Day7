@@ -2,20 +2,25 @@ package com.example.android56_day7.ui;
 
 import android.os.Bundle;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android56_day7.R;
 import com.example.android56_day7.adapters.CartAdapter;
+import com.example.android56_day7.databases.CartDatabaseHelper;
 import com.example.android56_day7.models.CartItem;
 import com.example.android56_day7.models.Product;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
 
-    private ListView lvCartItems;
+    private RecyclerView rvCartItems;
     private TextView txtTotalPrice;
     private Button btnBuyNow;
     private CartAdapter cartAdapter;
@@ -26,27 +31,40 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        lvCartItems = findViewById(R.id.lvCartItems);
+        rvCartItems = findViewById(R.id.rvCartItems);
         txtTotalPrice = findViewById(R.id.txtTotalPrice);
         btnBuyNow = findViewById(R.id.btnBuyNow);
 
-        Product p1 = new Product();
-        p1.setTitle("Adidas Runner");
-        p1.setPrice(59.99);
-        p1.setThumbnail("https://via.placeholder.com/150");
+        // Lấy từ SQLite
+        CartDatabaseHelper db = new CartDatabaseHelper(this);
+        List<Product> products = db.getAllProductFromLocal();
 
-        Product p2 = new Product();
-        p2.setTitle("Puma Black Bag");
-        p2.setPrice(32.00);
-        p2.setThumbnail("https://via.placeholder.com/150");
-
-        cartList = new ArrayList<>(Arrays.asList(
-                new CartItem(p1, 1),
-                new CartItem(p2, 2)
-        ));
+        cartList = new ArrayList<>();
+        for (Product p : products) {
+            cartList.add(new CartItem(p, 1));
+        }
 
         cartAdapter = new CartAdapter(this, cartList, this::updateTotalPrice);
-        lvCartItems.setAdapter(cartAdapter);
+        rvCartItems.setLayoutManager(new LinearLayoutManager(this));
+        rvCartItems.setAdapter(cartAdapter);
+
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition();
+                cartAdapter.removeItem(pos);
+                Toast.makeText(CartActivity.this, "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        new ItemTouchHelper(callback).attachToRecyclerView(rvCartItems);
 
         updateTotalPrice();
 

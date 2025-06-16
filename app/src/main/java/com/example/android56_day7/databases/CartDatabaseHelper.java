@@ -15,7 +15,7 @@ import com.example.android56_day7.models.Product;
 
 import java.util.ArrayList;
 
-public class ProductDatabaseHelper extends SQLiteOpenHelper {
+public class CartDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "products.sql";
     private static final int DATABASE_VERSION = 1;
 
@@ -23,18 +23,22 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_TITLE = "title";
     private static final String COLUMN_DES = "description";
-    private static final String COLUMN_CATEGORY = "category";
     private static final String COLUMN_PRICE = "price";
     private static final String COLUMN_THUMB = "thumbnail";
 
 
-    public ProductDatabaseHelper(@Nullable Context context) {
+    public CartDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + COLUMN_TITLE + " TEXT NOT NULL," + COLUMN_DES + " TEXT," + COLUMN_CATEGORY + " TEXT NOT NULL," + COLUMN_PRICE + " INTEGER NOT NULL," + COLUMN_THUMB + " TEXT )";
+        String sql = "CREATE TABLE " + TABLE_NAME + " (" +
+                COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_TITLE + " TEXT NOT NULL," +
+                COLUMN_DES + " TEXT," +
+                COLUMN_PRICE + " INTEGER NOT NULL," +
+                COLUMN_THUMB + " TEXT)";
 
         db.execSQL(sql);
     }
@@ -46,7 +50,6 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TITLE, product.getTitle());
         contentValues.put(COLUMN_PRICE, product.getPrice());
         contentValues.put(COLUMN_DES, product.getDescription());
-        contentValues.put(COLUMN_CATEGORY, product.getCategory());
         contentValues.put(COLUMN_THUMB, product.getThumbnail());
 
         long result = db.insert(TABLE_NAME, null, contentValues);
@@ -57,6 +60,7 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
+
 
     public void updateProductTitle(int id, String title) {
         SQLiteDatabase db = getWritableDatabase();
@@ -98,8 +102,6 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
                 int price = cursor.getInt(priceIndex);
                 int desIndex = cursor.getColumnIndex(COLUMN_DES);
                 String des = cursor.getString(desIndex);
-                int categoryIndex = cursor.getColumnIndex(COLUMN_CATEGORY);
-                String category = cursor.getString(categoryIndex);
                 int thumbIndex = cursor.getColumnIndex(COLUMN_THUMB);
                 String thumb = cursor.getString(thumbIndex);
 
@@ -108,7 +110,6 @@ public class ProductDatabaseHelper extends SQLiteOpenHelper {
                 product.setTitle(title);
                 product.setPrice(price + 0.0);
                 product.setDescription(des);
-                product.setCategory(category);
                 product.setThumbnail(thumb);
 
                 result.add(product);

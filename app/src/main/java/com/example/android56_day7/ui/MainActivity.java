@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ProductViewImpl {
     private ProductPresenter mProductPresenter;
     private EditText edtSearch;
     private Button btnSearch;
+    private Button btnOpenCart;
     private List<Product> fullProductList = new ArrayList<>();
 
     @Override
@@ -37,13 +38,13 @@ public class MainActivity extends AppCompatActivity implements ProductViewImpl {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-
     }
 
     public void initView() {
         recyclerView = findViewById(R.id.reDemo);
         edtSearch = findViewById(R.id.edtSearch);
         btnSearch = findViewById(R.id.btnSearch);
+        btnOpenCart = findViewById(R.id.btnOpenCart);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mProductPresenter = new ProductPresenter(this);
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements ProductViewImpl {
             } else {
                 mProductPresenter.getAllProduct();
             }
+        });
+        btnOpenCart.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, CartActivity.class);
+            startActivity(intent);
         });
     }
 

@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
     <LinearLayout
@@ -26,8 +26,8 @@
         <Button
             android:id="@+id/btnSearch"
             android:layout_width="100dp"
-            android:background="@drawable/card_bg"
             android:layout_height="35dp"
+            android:background="@drawable/card_bg"
             android:text="Search" />
     </LinearLayout>
 
@@ -36,9 +36,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_product"
         android:importantForAccessibility="no"
-        tools:itemCount="10" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_product" />
 
+    <Button
+        android:id="@+id/btnOpenCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#4CAF50"
+        android:text="Xem Giỏ hàng"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 </LinearLayout>
