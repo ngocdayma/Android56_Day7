@@ -11,13 +11,14 @@ import androidx.annotation.Nullable;
 
 
 import com.example.android56_day7.interfaces.db_product_listener.InsertProductListener;
+import com.example.android56_day7.models.CartItem;
 import com.example.android56_day7.models.Product;
 
 import java.util.ArrayList;
 
 public class CartDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "products.sql";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String TABLE_NAME = "products";
     private static final String COLUMN_ID = "id";
@@ -38,7 +39,8 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_TITLE + " TEXT NOT NULL," +
                 COLUMN_DES + " TEXT," +
                 COLUMN_PRICE + " INTEGER NOT NULL," +
-                COLUMN_THUMB + " TEXT)";
+                COLUMN_THUMB + " TEXT," +
+                "quantity INTEGER DEFAULT 1)";
 
         db.execSQL(sql);
     }
@@ -73,6 +75,37 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.close();
         }
+    }
+    public ArrayList<CartItem> getAllCartItemsFromLocal() {
+        ArrayList<CartItem> result = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
+                String des = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DES));
+                int price = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRICE));
+                String thumb = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_THUMB));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+
+                Product product = new Product();
+                product.setId(id);
+                product.setTitle(title);
+                product.setDescription(des);
+                product.setPrice((double) price);
+                product.setThumbnail(thumb);
+
+                CartItem cartItem = new CartItem(product, quantity);
+                result.add(cartItem);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return result;
     }
 
     public void removeProduct(int id) {
@@ -122,8 +155,23 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public void clearCart() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("products", null, null);
+        db.close();
+    }
+
+    public void updateQuantity(int productId, int newQuantity) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("quantity", newQuantity);
+        db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(productId)});
+        db.close();
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // todo DROP ALTERS TABLE IF EXISTS
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
     }
 }

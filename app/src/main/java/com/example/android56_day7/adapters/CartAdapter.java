@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.android56_day7.R;
+import com.example.android56_day7.databases.CartDatabaseHelper;
 import com.example.android56_day7.models.CartItem;
 import com.example.android56_day7.models.Product;
 
@@ -21,11 +22,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Context context;
     private List<CartItem> cartItems;
     private Runnable onCartChanged;
+    private CartDatabaseHelper dbHelper;
 
-    public CartAdapter(Context context, List<CartItem> cartItems, Runnable onCartChanged) {
+    public CartAdapter(Context context, List<CartItem> cartItems, Runnable onCartChanged, CartDatabaseHelper dbHelper) {
         this.context = context;
         this.cartItems = cartItems;
         this.onCartChanged = onCartChanged;
+        this.dbHelper = dbHelper;
     }
 
     public List<CartItem> getCartItems() {
@@ -55,16 +58,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         holder.btnIncrease.setOnClickListener(v -> {
             item.setQuantity(item.getQuantity() + 1);
+            dbHelper.updateQuantity(product.getId(), item.getQuantity());
             notifyItemChanged(position);
             onCartChanged.run();
         });
 
         holder.btnDecrease.setOnClickListener(v -> {
-            if (item.getQuantity() > 1) {
-                item.setQuantity(item.getQuantity() - 1);
+            int newQty = item.getQuantity() - 1;
+            if (newQty > 0) {
+                item.setQuantity(newQty);
+                dbHelper.updateQuantity(product.getId(), newQty);
                 notifyItemChanged(position);
-                onCartChanged.run();
+            } else {
+                dbHelper.removeProduct(product.getId());
+                cartItems.remove(position);
+                notifyItemRemoved(position);
             }
+            onCartChanged.run();
         });
     }
 
@@ -74,6 +84,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public void removeItem(int position) {
+        int productId = cartItems.get(position).getProduct().getId();
+        dbHelper.removeProduct(productId);
         cartItems.remove(position);
         notifyItemRemoved(position);
         onCartChanged.run();
